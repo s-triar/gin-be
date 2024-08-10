@@ -1,0 +1,195 @@
+definitions:
+  gin-be_internal_model.ErrorResponse:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  internal_controller.LoginResponse:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  internal_controller.RegisterUserResponse:
+    properties:
+      data:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  internal_controller.UserDTO:
+    properties:
+      email:
+        type: string
+      fullname:
+        type: string
+      id:
+        type: string
+      phone:
+        type: string
+    type: object
+  internal_controller.UserLogin:
+    properties:
+      Email:
+        type: string
+      Password:
+        type: string
+    required:
+    - Email
+    - Password
+    type: object
+  internal_controller.UserRegister:
+    properties:
+      ConfirmPassword:
+        type: string
+      Email:
+        type: string
+      Fullname:
+        type: string
+      Password:
+        type: string
+      Phone:
+        type: string
+    required:
+    - ConfirmPassword
+    - Email
+    - Fullname
+    - Password
+    - Phone
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/auth/check_email:
+    get:
+      consumes:
+      - application/json
+      description: Check existing email
+      parameters:
+      - description: Email to be compared
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin-be_internal_model.ErrorResponse'
+      summary: Check existing email
+      tags:
+      - v1/auth
+  /v1/auth/check_phone:
+    get:
+      consumes:
+      - application/json
+      description: Check existing phone
+      parameters:
+      - description: Phone to be compared
+        in: query
+        name: phone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: boolean
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin-be_internal_model.ErrorResponse'
+      summary: Check existing phone
+      tags:
+      - v1/auth
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user with email
+      parameters:
+      - description: User Login object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controller.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controller.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin-be_internal_model.ErrorResponse'
+      summary: Login user with email
+      tags:
+      - v1/auth
+  /v1/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register user with email
+      parameters:
+      - description: User Register object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controller.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controller.RegisterUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin-be_internal_model.ErrorResponse'
+      summary: Register user with email
+      tags:
+      - v1/auth
+  /v1/auth/user:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controller.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin-be_internal_model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - v1/auth
+swagger: "2.0"
